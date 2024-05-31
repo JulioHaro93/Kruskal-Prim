@@ -19,9 +19,6 @@ class KruskalPrim:
                 if arista.origen == nueva[1].destino:
                     MST += nueva[0]
                     grafito.agregarArista(arista.origen, nueva[1].destino)
-                    #print(str(arista)+"\nblahblahblah")
-                    #print(nueva)
-        #print(MST)
         return grafito, MST
     
     def kruskalInv(grafo):
@@ -42,7 +39,6 @@ class KruskalPrim:
         result = [x for x in grafo.aristas if x not in grafito.aristas]
         for arista in result:
             pass
-        print(MST)
         return grafito, MST
     
     from queue import PriorityQueue
@@ -51,22 +47,27 @@ class KruskalPrim:
         MST = 0
         q = PriorityQueue()
         grafillo = Grafo()
-        
-        nodoInicial= grafo.obtenerNodoArbitrario(len(grafo.aristas)-1)
-        nodito = grafo.aristas[nodoInicial].origen.visited = True
-        
+        nodoInicial= grafo.obtenerNodoArbitrario(len(grafo.aristas)-1)        
         for arista in grafo.aristas:
-            #print(arista)
-            if arista.origen == nodito:
-                q.put(arista)
-        print(grafo.aristas)
+            q.put(arista)
+                
         while not q.empty():
+            key = []
+            salientes = []
             arista = q.get()
-            if not arista.destino.visited:
-                arista.destino.visited = True
-                grafillo.agregarArista(arista.origen, arista.destino)
-                MST += arista.distancia
-                for nueva_arista in arista.destino.aristas:
-                    if not nueva_arista.destino.visited:
-                        q.put(nueva_arista)
+            arista.origen.visited = True
+            index = grafo.aristas.index(arista)
+            x=0
+            for x in range(len(grafo.aristas)):
+                if arista.origen == grafo.aristas[x].origen:
+                    key.append(grafo.aristas[x].distancia)
+                    salientes.append((grafo.aristas[x], grafo.aristas[x].distancia))
+            if key:
+                MST += min(key)
+            if salientes:
+                grafillo.aristas.append(min(salientes, key=lambda x: x[1])[0])
+            key.clear()
+            salientes.clear()
+            
+            x+=1
         return grafillo, MST
